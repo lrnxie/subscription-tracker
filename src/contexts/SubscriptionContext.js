@@ -10,21 +10,21 @@ export const SubscriptionContextProvider = (props) => {
       name: "Netflix",
       price: 13.99,
       cycle: "monthly",
-      date: "2018-01-30",
+      date: "2016-01-31",
     },
     {
       id: 2,
       name: "Spotify",
       price: 9.99,
-      cycle: "monthly",
-      date: "2019-12-05",
+      cycle: "weekly",
+      date: "2020-04-03",
     },
     {
       id: 3,
       name: "Amazon Prime",
       price: 79,
       cycle: "yearly",
-      date: "2020-07-29",
+      date: "2020-02-29",
     },
   ];
 
