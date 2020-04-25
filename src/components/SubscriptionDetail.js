@@ -33,15 +33,21 @@ const SubscriptionDetail = ({ subscription }) => {
     if (cycle === "yearly") {
       const diff = moment().diff(date, "years", true);
       nextDate =
-        diff > 0 ? moment(date).add(parseInt(diff) + 1, "year") : moment(date);
+        diff > 0
+          ? moment(date).add(Math.floor(diff) + 1, "year")
+          : moment(date);
     } else if (cycle === "monthly") {
       const diff = moment().diff(date, "months", true);
       nextDate =
-        diff > 0 ? moment(date).add(parseInt(diff) + 1, "month") : moment(date);
+        diff > 0
+          ? moment(date).add(Math.floor(diff) + 1, "month")
+          : moment(date);
     } else {
       const diff = moment().diff(date, "weeks", true);
       nextDate =
-        diff > 0 ? moment(date).add(parseInt(diff) + 1, "week") : moment(date);
+        diff > 0
+          ? moment(date).add(Math.floor(diff) + 1, "week")
+          : moment(date);
     }
 
     return nextDate.format("MMM DD, YYYY");
