@@ -1,104 +1,116 @@
 import React, { useContext, useState } from "react";
 import { SubscriptionContext } from "../contexts/SubscriptionContext";
 
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Modal,
-  ModalHeader,
-  ModalBody,
-} from "reactstrap";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
-const EditSubscription = (props) => {
+const EditSubscription = ({ show, handleClose, subscription }) => {
   const { dispatch } = useContext(SubscriptionContext);
-  const [name, setName] = useState(props.subscription.name);
-  const [price, setPrice] = useState(props.subscription.price);
-  const [cycle, setCycle] = useState(props.subscription.cycle);
-  const [date, setDate] = useState(props.subscription.date);
+  const [name, setName] = useState(subscription.name);
+  const [price, setPrice] = useState(subscription.price);
+  const [cycle, setCycle] = useState(subscription.cycle);
+  const [date, setDate] = useState(subscription.date);
+  const [validated, setValidated] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const form = e.currentTarget;
     const updatedSubscription = {
-      id: props.subscription.id,
+      id: subscription.id,
       name,
       price,
       cycle,
       date,
     };
 
-    dispatch({
-      type: "EDIT_SUBSCRIPTION",
-      subscription: { id: props.subscription.id, updatedSubscription },
-    });
-    props.toggle();
+    if (form.checkValidity() === false) {
+      setValidated(true);
+    } else {
+      dispatch({
+        type: "EDIT_SUBSCRIPTION",
+        subscription: { id: subscription.id, updatedSubscription },
+      });
+      setValidated(false);
+      handleClose();
+    }
   };
 
   return (
-    <Modal isOpen={props.modal} toggle={props.toggle}>
-      <ModalHeader toggle={props.toggle}>Edit subscription</ModalHeader>
-      <ModalBody>
-        <Form onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label>Name</Label>
-            <Input
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit subscription</Modal.Title>
+      </Modal.Header>
+
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              required
               type="text"
               placeholder="Subscription name"
-              required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-          </FormGroup>
-          <FormGroup>
-            <Label>Price</Label>
-            <Input
+            <Form.Control.Feedback type="invalid">
+              Please enter a name
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Price</Form.Label>
+            <Form.Control
+              required
               type="number"
-              placeholder="Subscription price"
               min="0.01"
               step="0.01"
-              required
+              placeholder="Subscription price"
               value={price}
               onChange={(e) => setPrice(+e.target.value)}
             />
-          </FormGroup>
-          <FormGroup>
-            <Label>Billing cycle</Label>
-            <Input
-              type="select"
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid number
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Billing cycle</Form.Label>
+            <Form.Control
+              as="select"
               value={cycle}
               onChange={(e) => setCycle(e.target.value)}
             >
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
               <option value="yearly">Yearly</option>
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label>First bill on</Label>
-            <Input
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>First bill on</Form.Label>
+            <Form.Control
+              required
               type="date"
               value={date}
-              required
               onChange={(e) => setDate(e.target.value)}
             />
-          </FormGroup>
-          <FormGroup>
-            <Button color="info" className="add">
-              Save
-            </Button>
-            <Button
-              color="secondary"
-              className="canccel"
-              onClick={props.toggle}
-            >
-              Cancel
-            </Button>
-          </FormGroup>
-        </Form>
-      </ModalBody>
+            <Form.Control.Feedback type="invalid">
+              Please enter a date
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="info" type="submit">
+            Save
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 };

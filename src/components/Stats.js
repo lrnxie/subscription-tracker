@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { SubscriptionContext } from "../contexts/SubscriptionContext";
 
-import { Container, Row, Col } from "reactstrap";
-
 const Stats = () => {
   const { subscriptions } = useContext(SubscriptionContext);
 
@@ -30,17 +28,13 @@ const Stats = () => {
     })
     .reduce((a, b) => a + b, 0);
 
-  return subscriptions.length ? (
-    <div>
-      <Container>
-        <Row>
-          <Col>Monthly cost: ${monthly.toFixed(2)}</Col>
-          <Col>Yearly cost: ${yearly.toFixed(2)}</Col>
-        </Row>
-      </Container>
-    </div>
-  ) : (
-    <div></div>
+  return (
+    subscriptions.length > 0 && (
+      <tr>
+        <td colSpan="2">Monthly cost: ${monthly.toFixed(2)}</td>
+        <td colSpan="2">Yearly cost: ${yearly.toFixed(2)}</td>
+      </tr>
+    )
   );
 };
 

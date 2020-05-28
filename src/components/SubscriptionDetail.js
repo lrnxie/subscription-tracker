@@ -3,14 +3,15 @@ import moment from "moment";
 import { SubscriptionContext } from "../contexts/SubscriptionContext";
 import EditSubscription from "./EditSubscription";
 
-import { ListGroupItem, Container, Row, Col, Button } from "reactstrap";
+import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 const SubscriptionDetail = ({ subscription }) => {
-  const [modal, setModal] = useState(false);
+  const [show, setShow] = useState(false);
 
-  const toggle = () => setModal(!modal);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const { dispatch } = useContext(SubscriptionContext);
 
@@ -54,38 +55,33 @@ const SubscriptionDetail = ({ subscription }) => {
   };
 
   return (
-    <ListGroupItem>
-      <Container>
-        <Row className="item">
-          <Col className="name">{subscription.name}</Col>
-          <Col>
-            ${subscription.price} / {formatCycle(subscription.cycle)}
-          </Col>
-          <Col>{nextBill(subscription.cycle, subscription.date)}</Col>
-          <Col className="edit-delete">
-            <div>
-              <Button color="info" className="edit" onClick={toggle}>
-                <FontAwesomeIcon icon={faEdit} />
-              </Button>
-              <EditSubscription
-                modal={modal}
-                toggle={toggle}
-                subscription={subscription}
-              />
-            </div>
-            <Button
-              color="info"
-              className="delete"
-              onClick={() =>
-                dispatch({ type: "REMOVE_SUBSCRIPTION", id: subscription.id })
-              }
-            >
-              <FontAwesomeIcon icon={faTrashAlt} />
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-    </ListGroupItem>
+    <tr>
+      <td>{subscription.name}</td>
+      <td>
+        ${subscription.price} / {formatCycle(subscription.cycle)}
+      </td>
+      <td>{nextBill(subscription.cycle, subscription.date)}</td>
+
+      <td>
+        <Button variant="outline-info" className="mr-1" onClick={handleShow}>
+          <FontAwesomeIcon icon={faEdit} />
+        </Button>
+        <EditSubscription
+          show={show}
+          handleClose={handleClose}
+          subscription={subscription}
+        />
+
+        <Button
+          variant="outline-info"
+          onClick={() =>
+            dispatch({ type: "REMOVE_SUBSCRIPTION", id: subscription.id })
+          }
+        >
+          <FontAwesomeIcon icon={faTrashAlt} />
+        </Button>
+      </td>
+    </tr>
   );
 };
 

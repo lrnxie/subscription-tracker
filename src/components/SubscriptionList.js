@@ -3,23 +3,22 @@ import { SubscriptionContext } from "../contexts/SubscriptionContext";
 import SubscriptionDetail from "./SubscriptionDetail";
 import Stats from "./Stats";
 
-import { ListGroup, ListGroupItem, Container, Row, Col } from "reactstrap";
+import Table from "react-bootstrap/Table";
 
 const SubscriptionList = () => {
   const { subscriptions } = useContext(SubscriptionContext);
   return subscriptions.length ? (
-    <div className="subscription-list">
-      <ListGroup>
-        <ListGroupItem>
-          <Container>
-            <Row>
-              <Col>Name</Col>
-              <Col>Price</Col>
-              <Col>Next bill</Col>
-              <Col>Actions</Col>
-            </Row>
-          </Container>
-        </ListGroupItem>
+    <Table hover>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Next bill</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
         {subscriptions.map((subscription) => {
           return (
             <SubscriptionDetail
@@ -28,13 +27,14 @@ const SubscriptionList = () => {
             />
           );
         })}
-        <ListGroupItem>
-          <Stats />
-        </ListGroupItem>
-      </ListGroup>
-    </div>
+
+        <Stats />
+      </tbody>
+    </Table>
   ) : (
-    <div className="no-subs">No subscriptions. Add one to start tracking!</div>
+    <h5 className="text-center mt-5 mx-2">
+      No subscriptions. Add one now to start tracking!
+    </h5>
   );
 };
 
