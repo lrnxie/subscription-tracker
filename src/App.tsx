@@ -1,10 +1,11 @@
 import React from "react";
+
 import { SubscriptionContextProvider } from "./contexts/SubscriptionContext";
-import { Header } from "./components/Header";
+import Header from "./components/Header";
 import SubscriptionList from "./components/SubscriptionList";
 import Footer from "./components/Footer";
 
-function App() {
+const App: React.FC = () => {
   return (
     <div>
       <SubscriptionContextProvider>
@@ -14,6 +15,6 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 
 export default App;

@@ -1,21 +1,27 @@
 import React, { useContext, useState } from "react";
 import moment from "moment";
-import { SubscriptionContext } from "../contexts/SubscriptionContext";
-import EditSubscription from "./EditSubscription";
-
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-const SubscriptionDetail = ({ subscription }) => {
+import { SubscriptionContext } from "../contexts/SubscriptionContext";
+import EditSubscription from "./EditSubscription";
+
+type SubscriptionDetailProps = {
+  subscription: Subscription;
+};
+
+const SubscriptionDetail: React.FC<SubscriptionDetailProps> = ({
+  subscription,
+}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { dispatch } = useContext(SubscriptionContext);
+  const { dispatch } = useContext(SubscriptionContext)!;
 
-  const formatCycle = (cycle) => {
+  const formatCycle = (cycle: Subscription["cycle"]) => {
     switch (cycle) {
       case "weekly":
         return "wk";
@@ -28,7 +34,7 @@ const SubscriptionDetail = ({ subscription }) => {
     }
   };
 
-  const nextBill = (cycle, date) => {
+  const nextBill = (cycle: Subscription["cycle"], date: string) => {
     let nextDate;
 
     if (cycle === "yearly") {

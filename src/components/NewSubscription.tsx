@@ -1,37 +1,50 @@
 import React, { useContext, useState } from "react";
-import { SubscriptionContext } from "../contexts/SubscriptionContext";
-
+import { v4 as uuidv4 } from "uuid";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-const EditSubscription = ({ show, handleClose, subscription }) => {
-  const { dispatch } = useContext(SubscriptionContext);
-  const [name, setName] = useState(subscription.name);
-  const [price, setPrice] = useState(subscription.price);
-  const [cycle, setCycle] = useState(subscription.cycle);
-  const [date, setDate] = useState(subscription.date);
+import { SubscriptionContext } from "../contexts/SubscriptionContext";
+
+type NewSubscriptionProps = {
+  show: boolean;
+  handleClose: () => void;
+};
+
+const NewSubscription: React.FC<NewSubscriptionProps> = ({
+  show,
+  handleClose,
+}) => {
+  const { dispatch } = useContext(SubscriptionContext)!;
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [cycle, setCycle] = useState<Subscription["cycle"]>("weekly");
+  const [date, setDate] = useState("");
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleClear = () => {
+    setName("");
+    setPrice(0);
+    setCycle("weekly");
+    setDate("");
+    setValidated(false);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const form = e.currentTarget;
-    const updatedSubscription = {
-      id: subscription.id,
-      name,
-      price,
-      cycle,
-      date,
-    };
-
     if (form.checkValidity() === false) {
       setValidated(true);
     } else {
       dispatch({
-        type: "EDIT_SUBSCRIPTION",
-        subscription: { id: subscription.id, updatedSubscription },
+        type: "ADD_SUBSCRIPTION",
+        subscription: { id: uuidv4(), name, price, cycle, date },
       });
+      setName("");
+      setPrice(0);
+      setCycle("weekly");
+      setDate("");
       setValidated(false);
       handleClose();
     }
@@ -40,7 +53,7 @@ const EditSubscription = ({ show, handleClose, subscription }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit subscription</Modal.Title>
+        <Modal.Title>Add a new subscription</Modal.Title>
       </Modal.Header>
 
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -80,7 +93,9 @@ const EditSubscription = ({ show, handleClose, subscription }) => {
             <Form.Control
               as="select"
               value={cycle}
-              onChange={(e) => setCycle(e.target.value)}
+              onChange={(e) =>
+                setCycle(e.target.value as Subscription["cycle"])
+              }
             >
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
@@ -103,11 +118,11 @@ const EditSubscription = ({ show, handleClose, subscription }) => {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
+          <Button variant="secondary" onClick={handleClear}>
+            Clear
           </Button>
           <Button variant="info" type="submit">
-            Save
+            Add
           </Button>
         </Modal.Footer>
       </Form>
@@ -115,4 +130,4 @@ const EditSubscription = ({ show, handleClose, subscription }) => {
   );
 };
 
-export default EditSubscription;
+export default NewSubscription;

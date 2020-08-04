@@ -1,19 +1,15 @@
 import React, { useState } from "react";
-import NewSubscription from "./NewSubscription";
-
 import Navbar from "react-bootstrap/Navbar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-export const Header = () => {
-  const [show, setShow] = useState(false);
+import NewSubscription from "./NewSubscription";
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+const Header: React.FC = () => {
+  const [show, setShow] = useState(false);
 
   return (
     <Navbar className="d-flex" variant="dark" bg="info">
@@ -21,13 +17,15 @@ export const Header = () => {
       <OverlayTrigger
         key="left"
         placement="left"
-        overlay={<Tooltip>Add subscription</Tooltip>}
+        overlay={<Tooltip id="new-subscription">Add subscription</Tooltip>}
       >
-        <Button variant="outline-light" onClick={handleShow}>
+        <Button variant="outline-light" onClick={() => setShow(true)}>
           <FontAwesomeIcon icon={faPlus} />
         </Button>
       </OverlayTrigger>
-      <NewSubscription show={show} handleClose={handleClose} />
+      <NewSubscription show={show} handleClose={() => setShow(false)} />
     </Navbar>
   );
 };
+
+export default Header;

@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
+import Table from "react-bootstrap/Table";
+
 import { SubscriptionContext } from "../contexts/SubscriptionContext";
 import SubscriptionDetail from "./SubscriptionDetail";
 import Stats from "./Stats";
 
-import Table from "react-bootstrap/Table";
+const SubscriptionList: React.FC = () => {
+  const { subscriptions } = useContext(SubscriptionContext)!;
 
-const SubscriptionList = () => {
-  const { subscriptions } = useContext(SubscriptionContext);
-  return subscriptions.length ? (
+  return subscriptions.length > 0 ? (
     <Table hover>
       <thead>
         <tr>

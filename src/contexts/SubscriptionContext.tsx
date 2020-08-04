@@ -1,9 +1,21 @@
 import React, { createContext, useReducer, useEffect } from "react";
+
 import { subscriptionReducer } from "../reducers/subscriptionReducer";
 
-export const SubscriptionContext = createContext();
+type Props = {
+  children: React.ReactNode;
+};
 
-export const SubscriptionContextProvider = (props) => {
+type SubscriptionContext = {
+  subscriptions: Subscription[];
+  dispatch: React.Dispatch<Action>;
+};
+
+export const SubscriptionContext = createContext<
+  SubscriptionContext | undefined
+>(undefined);
+
+export const SubscriptionContextProvider = ({ children }: Props) => {
   const [subscriptions, dispatch] = useReducer(subscriptionReducer, [], () => {
     const localData = localStorage.getItem("subscriptions");
     return localData ? JSON.parse(localData) : [];
@@ -15,7 +27,7 @@ export const SubscriptionContextProvider = (props) => {
 
   return (
     <SubscriptionContext.Provider value={{ subscriptions, dispatch }}>
-      {props.children}
+      {children}
     </SubscriptionContext.Provider>
   );
 };

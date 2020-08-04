@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
+
 import { SubscriptionContext } from "../contexts/SubscriptionContext";
 
-const Stats = () => {
-  const { subscriptions } = useContext(SubscriptionContext);
+const Stats: React.FC = () => {
+  const { subscriptions } = useContext(SubscriptionContext)!;
 
   const monthly = subscriptions
     .map((subscription) => {
@@ -28,13 +29,13 @@ const Stats = () => {
     })
     .reduce((a, b) => a + b, 0);
 
-  return (
-    subscriptions.length > 0 && (
-      <tr>
-        <td colSpan="2">Monthly cost: ${monthly.toFixed(2)}</td>
-        <td colSpan="2">Yearly cost: ${yearly.toFixed(2)}</td>
-      </tr>
-    )
+  return subscriptions.length > 0 ? (
+    <tr>
+      <td colSpan={2}>Monthly cost: ${monthly.toFixed(2)}</td>
+      <td colSpan={2}>Yearly cost: ${yearly.toFixed(2)}</td>
+    </tr>
+  ) : (
+    <></>
   );
 };
 
